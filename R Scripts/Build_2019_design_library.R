@@ -319,6 +319,23 @@ rm(list = c('oneR', 'twoR', 'threeR', 'i', 'ref_seq', 'seq'))
 #Future sets
 #make the set, turn it into a tibble, add as a new element in the library_2019 list
 
+############################################################################
+#Export library as excel where each set is its own sheet
+library(xlsx)
+
+#for(i in 1:length(library_2019)){
+#  write.xlsx(library_2019[[i]], file = 'Library_2019.xlsx', sheetName = names(library_2019)[i],
+#             append = T)
+#}
+
+#Use append = T in write.xlsx() to add on to this file in the future
+
+
+
+
+
+
+
 
 
 
