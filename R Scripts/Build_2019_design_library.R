@@ -316,11 +316,17 @@ library_2019$threeR <- threeR
 rm(list = c('oneR', 'twoR', 'threeR', 'i', 'ref_seq', 'seq'))
 
 ############################################################################
-#Future sets
+#Future sets----
 #make the set, turn it into a tibble, add as a new element in the library_2019 list
 
-############################################################################
-#Export library as excel where each set is its own sheet
+#Slims from natural TADs
+hold <- read.csv(file = 'Reports/SLiMs_motifs_in_random_library2.csv', 
+         stringsAsFactors = F)
+
+
+
+f############################################################################
+#Export library as excel where each set is its own sheet----
 library(xlsx)
 
 #for(i in 1:length(library_2019)){
