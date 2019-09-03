@@ -172,3 +172,97 @@ quantile(combos2$count)
 ro <- grep('[^RHK]', random_library$sequence)
 df <- random_library[ro,]
 table(df$binary_stop)
+
+
+####################
+##SPlit_df
+split_df$aro_1 <- str_count(split_df$section_1, '[WYF]')
+split_df$acid_1 <- str_count(split_df$section_1, '[DE]')
+
+split_df$aro_2 <- str_count(split_df$section_2, '[WYF]')
+split_df$acid_2 <- str_count(split_df$section_2, '[DE]')
+
+split_df$aro_3 <- str_count(split_df$section_3, '[WYF]')
+split_df$acid_3 <- str_count(split_df$section_3, '[DE]')
+
+split_df$aro_4 <- str_count(split_df$section_4, '[WYF]')
+split_df$acid_4 <- str_count(split_df$section_4, '[DE]')
+
+#aro is 0,1, or 2 which is 2 or more
+ro <- which(split_df$aro_1 > 2)
+split_df$aro_1[ro] <- 2
+
+ro <- which(split_df$aro_2 > 2)
+split_df$aro_2[ro] <- 2
+
+ro <- which(split_df$aro_3 > 2)
+split_df$aro_3[ro] <- 2
+
+ro <- which(split_df$aro_4 > 2)
+split_df$aro_4[ro] <- 2
+
+#get combos
+combos <- expand.grid(0:2, 0:2, 0:2, 0:2) %>% as_tibble()
+
+combos$live_count <- 0
+combos$die_count <- 0
+
+for(i in 1:nrow(combos)){
+  df <- split_df %>% 
+    filter(aro_1 == combos$Var1[i]) %>% 
+    filter(aro_2 == combos$Var2[i]) %>% 
+    filter(aro_3 == combos$Var3[i]) %>% 
+    filter(aro_4 == combos$Var4[i])
+  combos$live_count[i] <- df %>% filter(binary_stop == 'live') %>% nrow()
+  combos$die_count[i] <- df %>% filter(binary_stop == 'die') %>% nrow()
+}
+
+combos$live_percent <- combos$live_count/(combos$live_count + combos$die_count) * 100
+
+##DO SAME FOR ACIDIC
+#aro is 0,1, or 2 which is 2 or more
+ro <- which(split_df$acid_1 > 2)
+split_df$acid_1[ro] <- 2
+
+ro <- which(split_df$acid_2 > 2)
+split_df$acid_2[ro] <- 2
+
+ro <- which(split_df$acid_3 > 2)
+split_df$acid_3[ro] <- 2
+
+ro <- which(split_df$acid_4 > 2)
+split_df$acid_4[ro] <- 2
+
+#get combos
+combos <- expand.grid(0:2, 0:2, 0:2, 0:2) %>% as_tibble()
+
+combos$live_count <- 0
+combos$die_count <- 0
+
+for(i in 1:nrow(combos)){
+  df <- split_df %>% 
+    filter(acid_1 == combos$Var1[i]) %>% 
+    filter(acid_2 == combos$Var2[i]) %>% 
+    filter(acid_3 == combos$Var3[i]) %>% 
+    filter(acid_4 == combos$Var4[i])
+  combos$live_count[i] <- df %>% filter(binary_stop == 'live') %>% nrow()
+  combos$die_count[i] <- df %>% filter(binary_stop == 'die') %>% nrow()
+}
+
+combos$live_percent <- combos$live_count/(combos$live_count + combos$die_count) * 100
+
+set.seed(123)
+hold <- tibble(row = 1:12000, barcode = '')
+for(i in 1:12000){
+hold$barcode[i] <- sample(c('A', 'T', 'G', 'C'), 20, replace = T) %>% paste(collapse = '')
+}
+
+
+
+
+
+
+
+
+
+

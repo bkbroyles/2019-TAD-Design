@@ -320,12 +320,58 @@ rm(list = c('oneR', 'twoR', 'threeR', 'i', 'ref_seq', 'seq'))
 #make the set, turn it into a tibble, add as a new element in the library_2019 list
 
 #Slims from natural TADs
-hold <- read.csv(file = 'Reports/SLiMs_motifs_in_random_library2.csv', 
-         stringsAsFactors = F)
+motif <- read_rds('natural_motif_samples')
+
+  #build sequences and add to library
+  library_2019$p53_1rep <- paste('GGGGGGGGGGGGGGG', motif$p53, sep = '')
+  library_2019$p53_2rep <- paste('GGGGGGGGGG', motif$p53, motif$p53, sep = '')
+  
+  library_2019$Rela2_1rep <- paste('GGGGGGGGGGGG', motif$Rela2, sep = '')
+  library_2019$Rela2_2rep <- paste('GGGG', motif$Rela2, motif$Rela2, sep = '')
+  
+  library_2019$CREBZF_1rep <- paste('GGGGGGGGGGGGG', motif$CREBZF, sep = '')
+  library_2019$CREBZF_2rep <- paste('GGGGGG', motif$CREBZF, motif$CREBZF, sep = '')
+  
+  library_2019$AR_1rep <- paste('GGGGGGGGGGGGGGG', motif$AR, sep = '')
+  library_2019$AR_2rep <- paste('GGGGGGGGGG', motif$AR, motif$AR, sep = '')
+  
+  library_2019$EKLF_1rep <- paste('GGGGGGGGGG', motif$EKLF, sep = '')
+  library_2019$EKLF_2rep <- paste(motif$EKLF, motif$EKLF, sep = '')
+  
+  #anac013 has variable length so I need to calculate
+  seqs <- list()
+  for (i in 1:50) {
+    seq <- motif$ANAC013[i]
+    len <- nchar(seq)
+    geez <- rep('G', 20 - len) %>% paste(collapse = '')
+    seqs[[i]] <- paste(geez, seq, sep = '')
+  }
+  library_2019$ANAC013_1rep <- unlist(seqs)
+  
+  seqs <- list()
+  for (i in 1:50) {
+    seq <- motif$ANAC013[i]
+    len <- nchar(seq) * 2
+    geez <- rep('G', 20 - len) %>% paste(collapse = '')
+    seqs[[i]] <- paste(geez, seq, seq, sep = '')
+  }
+  library_2019$ANAC013_2rep <- unlist(seqs)
+  
+#adding natural tads
+  tads <- read_rds('natural_tad_sequences')
+  #fill in the sequences with geez
+  seqs <- list()
+  for (i in 1:13) {
+    seq <- tads$tad[i]
+    len <- tads$length[i]
+    geez <- rep('G', 20 - len) %>% paste(collapse = '')
+    seqs[[i]] <- paste(geez, seq, sep = '')
+  }
+  library_2019$natural_tads <- tibble(seq = unlist(seqs), name = tads$name)
 
 
 
-f############################################################################
+############################################################################
 #Export library as excel where each set is its own sheet----
 library(xlsx)
 
@@ -336,7 +382,48 @@ library(xlsx)
 
 #Use append = T in write.xlsx() to add on to this file in the future
 
+###############################################################################
+##Finalizing summer library 9/3/19
+  
+  library_2019$combinatorial
 
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 
 

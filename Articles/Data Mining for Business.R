@@ -174,102 +174,207 @@ library(tidyverse)
       
       #display this data as contourplot
       contourplot(t6, scales = list(x = list(rot = 90)))
-          
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+  ##Example 2.2 Alumni Donations
+  #load libraries and data
+  library(lattice)
+  don <- read.csv('contribution.csv')
+  
+    ##look at distribution of data
+    barchart(table(don$Class.Year), horizontal = F,
+             xlab = 'class year', col = 'black')
     
+    don$TGiving <- don$FY00Giving + don$FY01Giving + don$FY02Giving + 
+      don$FY03Giving + don$FY04Giving
+
+    mean(don$TGiving)
     
+    sd(don$TGiving)
+    
+    quantile(don$TGiving, probs = seq(0,1,0.05))
 
+    quantile(don$TGiving, probs = seq(0.95, 1, 0.01))
+    
+    hist(don$TGiving)
+    hist(don$TGiving[don$TGiving!=0][don$TGiving[don$TGiving!=0] <= 1000])
+    boxplot(don$TGiving, horizontal = T, xlab = 'Total Contribution')
+    boxplot(don$TGiving, outline = F, horizontal = T, xlab = 'Total Contribution')
 
+    ##Explore relationship of alumni contributions among the 5 years
+    data <- data.frame(don$FY04Giving, don$FY03Giving, don$FY02Giving, don$FY01Giving, don$FY00Giving)
+    correlation <- cor(data)
+    plot(data)
+    library(ellipse)
+    plotcorr(correlation)      
 
+    ##explore contributions with mosaic plots
+    don$TGivingIND <- cut(don$TGiving, c(-1, 0.5, 10000000), labels = F) - 1
+    
+    mosaicplot(factor(don$Gender) ~ factor(don$TGivingIND))
+    mosaicplot(factor(don$Marital.Status) ~ factor(don$TGivingIND))
+    mosaicplot(factor(don$AttendenceEvent) ~ factor(don$TGivingIND))
+    t2 <- table(factor(don$Marital.Status), factor(don$TGivingIND),
+                factor(don$AttendenceEvent))
+    mosaicplot(t2[,,1])
+    mosaicplot(t2[,,2])
+    
+    ##
+    
+  ##Example 3: Orange Juice
+    
+    ##load lattice for plotting
+    library(lattice)
+    
+    ##look at OJ sales per store per brand on a weekly basis
+    oj <- read.csv('oj.csv')
+    oj$store <- factor(oj$store)
+    oj[1:2,]
+    
+    t1 <- tapply(oj$logmove, oj$brand, FUN = mean, na.rm = T)
+    t1      
+    
+    t2 <- tapply(oj$logmove, INDEX = list(oj$brand, oj$week), FUN = mean, na.rm = T)      
+    t2
+    
+    plot(t2[1,], type = 'l', xlab = 'week', ylab = 'dominicks', ylim = c(7,12))
+    plot(t2[2,], type = 'l', xlab = 'week', ylab = 'minute.maid', ylim = c(7,12))
+    plot(t2[3,], type = 'l', xlab = 'week', ylab = 'tropicana', ylim = c(7,12))
+    
+    ##clean up plots with lattice
+    logmove <- c(t2[1,], t2[2,], t2[3,])
+    week1 <- c(40:160)      
+    week <- c(week1, week1, week1)
+    brand1 <- rep(1, 121)
+    brand2 <- rep(2, 121)      
+    brand3 <- rep(3, 121)      
+    brand <- c(brand1, brand2, brand3)      
 
+    xyplot(logmove ~ week|factor(brand), type = 'l', layout = c(1,3),
+           col = 'black')      
+    
+    boxplot(logmove ~ brand, data = oj)
+    histogram(~logmove|brand, data = oj, layout = c(1,3))
+    densityplot(~logmove|brand, data = oj, layout = c(1,3),
+                plot.points = F)
+    densityplot(~logmove, groups = brand, data = oj, plot.points = F)
+    
+    ##Previous plots ignore effects of price and advertisment
+    ##look at the effects of these variables on sales
+    xyplot(logmove~price, data = oj, col = 'black')
+    xyplot(logmove~price|brand, data = oj, col = 'black',
+           layout = c(1,3))
+    
+    smoothScatter(oj$price, oj$logmove)
+    densityplot(~logmove, groups = feat, data = oj, plot.points = F)
+    xyplot(logmove~price, groups = feat, data = oj) #clearly advertising increases sales
+    
+    ##consider sales at just one store
+    oj1 <- oj[oj$store == 5,]
+    xyplot(logmove ~ week|brand, data = oj1, type = 'l', layout = c(1,3),
+           col = 'black')
+    xyplot(logmove ~ price|brand, data = oj1, col = 'black', layout = c(1,3))
+    densityplot(~logmove|brand, groups = feat, data = oj1, plot.points = F)
+    xyplot(logmove ~ price|brand, groups = feat, data = oj1)
+    
+    ##do poorer areas react to price changes more than wealthy areas
+    #store 62 - wealthy, store 75 - poor
+    t21 <- tapply(oj$INCOME, oj$store, FUN = mean, na.rm = T)
+    t21[t21 == max(t21)] #62
+    t21[t21 == min(t21)] #75
+    
+    oj1 <- oj[oj$store == 62,]
+    oj2 <- oj[oj$store == 75,]      
+    oj3 <- rbind(oj1, oj2)
+    
+    xyplot(logmove~price|store, data = oj3) #hard to compare lets add advertising groups
+    xyplot(logmove~price|store, groups = feat, data = oj3)
+    
+      #wealthy store
+      mhigh <- lm(logmove~price, data = oj1) #lm finds best fit line
+      summary(mhigh)
+      plot(logmove~price, data = oj1, xlim = c(0,4), ylim = c(0,13))
+      abline(mhigh)
+      
+      #poor store
+      mlow <- lm(logmove ~ price, data = oj2)
+      summary(mlow)      
+      plot(logmove~price, data = oj2, xlim = c(0,4), ylim = c(0,13))      
+      abline(mlow)      
+      
+      #poorer areas respond more to price changes than wealthy areas
+      
+#CH3 - Standard Linear Regression ----
+      
 
+  ##Lessons from chapter 3
+      cat('1. In standard linear regression 
+                the response variable y is continous
+          y = f(x1, x2, ..., xk) + e = a + b1x1 + b2x2 + ... + bkxk + e,
+          ')
+      
+      
+      
+      
+      ###Make random sequences with at least 2 aromatics and 2 acidcs
+      aa_vector <- c('A','L','V','I','M','W','Y','F',
+                     'S','T','N','Q','C','G','P','R','H','K','D','E')
+      seq_list <- list()
+      for(i in 1:1000){
+      set_pos <- sample(1:20, 4, replace = F)
+      seq <- sample(aa_vector, 20, replace = T)
+      seq[set_pos[1:2]] <- 'W'
+      seq[set_pos[3:4]] <- 'D'
+      seq <- paste(seq, collapse = '')
+      seq_list[[i]] <- seq
+      }
 
+      
+      
+      
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
