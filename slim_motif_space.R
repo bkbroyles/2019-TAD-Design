@@ -48,9 +48,9 @@ aa_vector <- c('A', 'L', 'V', 'I', 'M',
                'D', 'E')
 
 
-seq <- matrix(data = '', nrow = 50, ncol = 5)
+seq <- matrix(data = '', nrow = 100, ncol = 5) 
 
-for(i in 1:50){
+for(i in 1:100){
 seq[i, c(1,4,5)] <- sample(reggie1, 3, replace = T)
 seq[i, 2:3] <- sample(aa_vector, 2, replace = T)
 }
@@ -72,9 +72,9 @@ aa_vector <- c('A', 'L', 'V', 'I', 'M',
                'R', 'H', 'K',
                'D', 'E')
 
-seq <- matrix(data = '', nrow = 50, ncol = 8)
+seq <- matrix(data = '', nrow = 100, ncol = 8)
 
-for (i in 1:50) {
+for (i in 1:100) {
   seq[i, c(1,2,5,8)] <- sample(reggie1, 4, replace = T)
   seq[i, c(3,4,6,7)] <- sample(aa_vector, 4, replace = T)
 }
@@ -92,9 +92,9 @@ reggie2 <- c('R', 'K', 'D', 'E', 'Q', 'N',
              'S', 'T', 'Y', 'C', 'H')
 reggie3 <- c('V', 'I', 'L', 'F', 'W', 'Y', 'M')
 
-seq <- matrix(data = '', nrow = 50, ncol = 7)
+seq <- matrix(data = '', nrow = 100, ncol = 7)
 
-for (i in 1:50) {
+for (i in 1:100) {
   seq[i, 1] <- 'D'
   seq[i, c(2,3,6)] <- sample(reggie1, 3, replace = T)
   seq[i, c(4,5)] <- sample(reggie2, 2, replace = T)
@@ -109,8 +109,8 @@ motifs <- seq %>% as_tibble(.name_repair = 'unique') %>%
 motif_list$CREBZF <- motifs$seq
 
 #AR - F..LF
-seq <- matrix(data = '', nrow = 50, ncol = 5)
-for (i in 1:50) {
+seq <- matrix(data = '', nrow = 100, ncol = 5)
+for (i in 1:100) {
   seq[i, c(1,5)] <- 'F'
   seq[i, c(2,3)] <- sample(aa_vector, 2, replace = T)
   seq[i, 4] <- 'L'
@@ -128,9 +128,9 @@ reggie1 <- c('R', 'K', 'D', 'E', 'Q', 'N',
             'S', 'T', 'Y', 'C', 'H')
 reggie2 <- c('A','L','V','I','M','W','Y','F')
 
-seq <- matrix(data = '', nrow = 50, ncol = 10)
+seq <- matrix(data = '', nrow = 100, ncol = 10)
 
-for (i in 1:50) {
+for (i in 1:100) {
   seq[i, c(1,9,10)] <- sample(reggie1, 3, replace = T)
   seq[i, c(2,3,6)] <- sample(reggie2, 3, replace = T)
   seq[i, c(4,5,7,8)] <- sample(aa_vector, 4, replace = T)
@@ -151,7 +151,7 @@ size1 <- c(1, 2)
 size2 <- c(1,2,3,4)
 
 seq <- list()
-for (i in 1:50) {
+for (i in 1:100) {
   section1 <- sample(reggie1, 1)
   section2 <- sample(aa_vector, size = sample(size1, 1),
                      replace = T)

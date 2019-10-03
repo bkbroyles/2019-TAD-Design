@@ -16,7 +16,15 @@ for (i in 1:length(Whold)) {
   WDhold[[i]]<-gsub('1', 'D', Whold[[i]])
 }
 
+for (i in 1:length(WDhold)) {
+  WDhold[[i]] <- paste(WDhold[[i]], collapse = '')
+}
+i <- 1
 
+hold <- tibble(sequence = unlist(WDhold),
+       set = 'random_WD20')
+
+library_2019$random_WD20 <- hold
 
 
 

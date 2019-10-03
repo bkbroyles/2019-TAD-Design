@@ -48,16 +48,36 @@ for (i in 1:length(Whold)) {
   WDhold[[i]]<-gsub('1', 'D', Whold[[i]])
 }
 
+#making dipep repeats to add to library
+aa_vector <- c('A', 'L','V','I','M',
+               'W','Y','F','D','E',
+               'R','H','K','S','T','N','Q',
+               'C','G','P')
 
+combos <- expand.grid(aa_vector,aa_vector, stringsAsFactors = F) %>% 
+  as_tibble()
 
+combos <- combos %>% 
+  mutate(
+    dipep = paste(Var1, Var2, sep = '')
+  )
 
+combos$seq <- ''
+for (i in 1:400) {
+  combos$seq[i] <- rep(combos$dipep[i], 10) %>% paste(collapse = '')
+}
 
+df <- combos %>% select(seq) %>% 
+  transmute(
+    sequence = seq, 
+    set = "dipeptide"
+  )
 
+df <- rbind(df,df)
 
+library_2019$dipep <- df
 
-
-
-
+full_library <- rbind(full_library, df)
 
 
 
