@@ -28,4 +28,4 @@ for(i in 1:nrow(HistoneBindingMotifHold)){
 }
 
 
-saveRDS(HistoneBindingMotif, file = 'HistoneBindingMotifSequences')
+saveRDS(HistoneBindingMotif, file = 'HistoneBindingMotifSequences.rds')
