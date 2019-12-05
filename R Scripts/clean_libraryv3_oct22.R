@@ -73,6 +73,35 @@ wd12 <- wd12[-remove_rows,]
   combinatorial <- rbind(wd11, wd12)
   aa_library[[1]] <- combinatorial
   
+  #also save the 69 sequences that will be left out just to have
+  lost_wd12 <- wd12[remove_rows,]
+  saveRDS(lost_wd12, '69_sequences_removed from combinatorial.rds')
+  
 #add andrews histone binding sets
+histone_binding <- readRDS(file = "R Scripts/AA library preperations/HistoneBindingMotifSequences.rds")
+
+#fixing names for DEF/Y
+histone_binding$name[1:5] <- c('Chz1_S.c.', 
+                               'YL1_H.s',
+                               'Anp32e_H.s',
+                               'Swr1_S.c',
+                               'Spt16_S.c')
+
+aa_library[[30]] <- histone_binding
+names(aa_library)[[30]] <- 'histone_binding_set'
+
+
+#save the library into a new file name v4
+#library(xlsx)
+
+#for(i in 1:length(aa_library)){
+# write.xlsx(aa_library[[i]], file = 'Library_2019_v5.xlsx', sheetName = names(aa_library)[i],
+#             append = T)
+#}
+
+#save aa_library
+#saveRDS(aa_library, file = 'aa_library_v5.rds')
+
+
 
 
